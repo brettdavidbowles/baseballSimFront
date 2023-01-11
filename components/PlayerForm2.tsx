@@ -30,7 +30,7 @@ export class PlayerForm extends React.Component{
     console.log('target', target.name)
     console.log(this.state)
   }
-  handleSubmit = (event: any) => {
+  handleSubmit = () => {
     const attributesArray : PlayerAttribute[] = []
     for (let i=0; i<Object.keys(this.state.attributes).length; i++){
       attributesArray.push({
@@ -39,8 +39,6 @@ export class PlayerForm extends React.Component{
       })
     }
     const newBatter = new Batter(this.state.name, Math.random(), attributesArray)
-    this.setState({batters: [...this.state.batters, newBatter]})
-    event.preventDefault()
   }
   render() {
     return (
@@ -91,11 +89,6 @@ export class PlayerForm extends React.Component{
             value="Create Player"
           />
         </form>
-        <div>
-          {this.state.batters.map(batter => (
-            <div key={batter.id}>{batter.name}</div>
-          ))}
-        </div>
       </div>
     )
   }
