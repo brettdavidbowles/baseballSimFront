@@ -1,0 +1,20 @@
+mutation AddPlayer (
+  $name: String!
+  $position: String!,
+  $team: String!
+ ) {
+  insert_players(
+    objects: {
+      name: $name
+      position: $position
+      team: $team
+    }
+  ){
+    returning {
+      name
+      position
+      team
+      id
+    }
+  }
+ }

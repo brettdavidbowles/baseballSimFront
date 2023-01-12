@@ -1,16 +1,9 @@
 import { useQuery, gql } from "@apollo/client";
 import styles from "../styles/Home.module.css";
-
-const QUERY = gql`
-  query Leagues {
-    league {
-      name
-    }
-  }
-`;
+import { GetLeagues } from 'gql/queries/GetLeagues.gql'
 
 export default function Leagues() {
-  const { data, loading, error } = useQuery(QUERY);
+  const { data, loading, error } = useQuery(GetLeagues);
 
   if (loading) {
     return <h2>Loading...</h2>;
@@ -21,7 +14,7 @@ export default function Leagues() {
     return null;
   }
 
-  const leagues = data.league;
+  const leagues = data.leagues;
 
   return (
     <div className={styles.grid}>

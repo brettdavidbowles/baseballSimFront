@@ -1,0 +1,16 @@
+mutation AddPlayersToDB (
+  $input: [players_insert_input!]!
+ ) {
+  insert_players(
+    objects: {
+      input: $input
+    }
+  ){
+    returning {
+      name
+      position
+      team
+      id
+    }
+  }
+ }

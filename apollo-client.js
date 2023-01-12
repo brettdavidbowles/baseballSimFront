@@ -12,7 +12,7 @@ const authLink = setContext((_, { headers }) => {
  });
 
  const httpLink = createHttpLink({
-  uri: 'https://baseball-sim.hasura.app/v1/graphql',
+  uri: process.env.API_URL,
  });
 
 const client = new ApolloClient({
