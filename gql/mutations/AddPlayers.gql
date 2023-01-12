@@ -1,10 +1,8 @@
 mutation AddPlayersToDB (
-  $input: [players_insert_input!]
+  $input: [players_insert_input!]!
  ) {
   insert_players(
-    objects: {
-      input: $input
-    }
+    objects: $input
   ){
     returning {
       name

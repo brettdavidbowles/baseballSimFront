@@ -33,39 +33,22 @@ const teams = [
 
 export default function AddPlayers() {
   const [addPlayers, {data, loading, error}] = useMutation(AddPlayersToDB)
-  // const addOnePlayer = async (name: string, position: string, team: string) => {
-  //   setTimeout(() => {
-  //     // b/c of hasura's damn rate limit
-  //   addPlayer({
-  //     variables: {
-  //       name: name,
-  //       position: position,
-  //       team: team
-  //     }
-  //   })
-  // }, 1000)
-  //   const player = await data
-  //   console.log(player)
-  // }
-  // const test = () => {
-  //   addOnePlayer('test2', 'pitcher', 'testTwo')
-  // }
   const add_players = () => {
     const playerArray: object[] = []
     for (let i=0; i<199; i++){
       const player = {
-        name: `${i}TestBaller`,
+        name: `${i}TestFella`,
         position: positions[i % 10],
         team: teams[Number(String(i/20)[0])]
       }
       playerArray.push(player)
     }
-    console.log(playerArray)
     addPlayers({
       variables: {
         input: playerArray
       }
     })
+    console.log(data)
   }
   return (
     <div>
