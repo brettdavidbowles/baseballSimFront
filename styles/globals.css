@@ -23,6 +23,13 @@ a {
     background: black;
   }
 }
+
+td,
+th {
+  width: 2rem;
+  text-align: center;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
