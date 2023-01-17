@@ -30,7 +30,7 @@ const makeNineInnings = (scores : number[]) => {
 
 
 export class ScoreBoard extends React.Component<ScoreBoardProps>{
-  constructor(props: any) {
+  constructor(props: ScoreBoardProps) {
     super(props)
   }
   render() {

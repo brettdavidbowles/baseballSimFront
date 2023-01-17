@@ -11,6 +11,11 @@ type PlayerFormState = {
   attributes: object,
 }
 export class PlayerForm extends React.Component{
+  constructor(props: any) {
+    // no any?
+    super(props)
+    this.handleChange = this.handleChange.bind(this)
+  }
   state: PlayerFormState =  {
     batters: [],
     name: '',

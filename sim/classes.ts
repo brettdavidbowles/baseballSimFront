@@ -7,11 +7,18 @@ class Player {
     this.id = id
   }
 }
+// interface BatterStats {
+//   strength: number,
+//   luck: number
+// }
+// interface PitcherStats {
+//   strength: number,
+//   luck: number
+// }
 
 interface PlayerAttribute {
   name: string,
   level: number
-  // add positions
 }
 interface AttributeWeight {
   name: string,
