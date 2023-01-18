@@ -1,8 +1,10 @@
 import { TeamDropDown } from "../components/game/TeamDropDown";
 import * as GetTeams from 'gql/queries/GetTeams.gql'
 import { useQuery } from "@apollo/client"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Team } from '../classes'
+import * as GetTeamPlayers from 'gql/queries/GetTeamPlayers.gql'
+import { LineUp } from "../components/game/LineUp";
 
 export default function RunGame() {
   const { loading, error, data } = useQuery(GetTeams)
@@ -19,6 +21,16 @@ export default function RunGame() {
       setAwayTeam({ name: teamName })
     }
   }
+  const { loading: homeTeamLoading, data: homeTeamData } = useQuery(
+    GetTeamPlayers, {
+      variables: { name: homeTeam.name},
+      skip: !homeTeam.name
+  })
+  const { loading: awayTeamLoading, data: awayTeamData } = useQuery(
+    GetTeamPlayers, {
+      variables: { name: awayTeam.name},
+      skip: !awayTeam.name
+  })
 
   return (
     <div>
@@ -29,20 +41,32 @@ export default function RunGame() {
         <h2>
           Choose Teams:
         </h2>
-        <TeamDropDown 
-          homeOrAway="Away"
-          teams={data?.teams}
-          loading={loading}
-          onTeamChange={setTeam}
-        />
-        <div>{awayTeam.name}</div>
-        <TeamDropDown
-          homeOrAway="Home"
-          teams={data?.teams}
-          loading={loading}
-          onTeamChange={setTeam}
-        />
-        <div>{homeTeam.name}</div>
+        <div className="flex justify-between space-x-2">
+          <div>
+            <TeamDropDown 
+              homeOrAway="Away"
+              teams={data?.teams}
+              loading={loading}
+              onTeamChange={setTeam}
+            />
+            <LineUp
+              players={awayTeamData?.teams_by_pk?.players}
+              loading={awayTeamLoading}
+            />
+          </div>
+          <div>
+            <TeamDropDown
+              homeOrAway="Home"
+              teams={data?.teams}
+              loading={loading}
+              onTeamChange={setTeam}
+            />
+            <LineUp
+              players={homeTeamData?.teams_by_pk?.players}
+              loading={homeTeamLoading}
+            />
+          </div>
+        </div>
       </div>
     </div>
   )

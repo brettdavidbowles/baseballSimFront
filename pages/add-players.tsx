@@ -3,7 +3,8 @@
 import { useMutation, useQuery } from "@apollo/client"
 import * as AddPlayersToDB from "gql/mutations/AddPlayers.gql"
 // import * as GetTeams from 'gql/queries/GetTeams.gql'
-
+import * as GetPlayers from 'gql/queries/GetPlayers.gql'
+import * as AddPlayerAttributes from 'gql/mutations/AddPlayersAttributes.gql'
 
 const positions = [
   "pitcher",
@@ -32,7 +33,9 @@ const teams = [
 ]
 
 export default function AddPlayers() {
-  const [addPlayers, {data, loading, error}] = useMutation(AddPlayersToDB)
+  // const [addPlayers, {data, loading, error}] = useMutation(AddPlayersToDB)
+  const [addPlayerAttributesMutation, {data}] = useMutation(AddPlayerAttributes)
+  const { data: playerData, loading: playerLoading } = useQuery(GetPlayers)
   const add_players = () => {
     const playerArray: object[] = []
     for (let i=0; i<199; i++){
@@ -43,18 +46,53 @@ export default function AddPlayers() {
       }
       playerArray.push(player)
     }
-    addPlayers({
+    // addPlayers({
+    //   variables: {
+    //     input: playerArray
+    //   }
+    // })
+    // console.log(data)
+  }
+  interface PlayerJustRightHereThough {
+    id: number
+    ___typename: "players"
+  }
+  const assignRandomPlayerAttributes = (player: PlayerJustRightHereThough) => {
+    const composure = Math.floor(Math.random() * 100)
+    const endurance = Math.floor(Math.random() * 100)
+    const intellect = Math.floor(Math.random() * 100)
+    const reflexes = Math.floor(Math.random() * 100)
+    const speed = Math.floor(Math.random() * 100)
+    const strength = Math.floor(Math.random() * 100)
+    const willpower = Math.floor(Math.random() * 100)
+    return {
+      player_id: player.id,
+      composure,
+      endurance,
+      intellect,
+      reflexes,
+      speed,
+      strength,
+      willpower,
+    }
+  }
+
+  const addPlayerAttributes = (players: PlayerJustRightHereThough[]) => {
+    addPlayerAttributesMutation({
       variables: {
-        input: playerArray
+        input: players.map(player => assignRandomPlayerAttributes(player))
       }
     })
-    console.log(data)
+  }
+  let magicButton
+  if(playerLoading) {
+    magicButton = <span>loading...</span>
+  } else if (playerData?.players){
+    magicButton = <button onClick={() => addPlayerAttributes(playerData.players)}>press it</button>
   }
   return (
     <div>
-      <button onClick={add_players}>
-        Add a bunch of players
-      </button>
+      {magicButton}
     </div>
   )
   // interface team {

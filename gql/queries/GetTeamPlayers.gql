@@ -1,0 +1,23 @@
+query GetTeamPlayers (
+  $name: String!
+){
+  teams_by_pk(
+    name: $name
+  ){
+    players {
+      id
+      name
+      position
+      player_attribute {
+        composure
+        endurance
+        intellect
+        player_id
+        reflexes
+        speed
+        strength
+        willpower
+      }
+    }
+  }
+}

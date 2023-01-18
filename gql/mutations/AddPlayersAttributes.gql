@@ -1,0 +1,18 @@
+mutation AddPlayerAttributes(
+  $input: [player_attribute_insert_input!]!
+) {
+  insert_player_attribute(
+    objects: $input
+  ) {
+    returning {
+      player_id
+      composure
+      endurance
+      intellect
+      reflexes
+      speed
+      strength
+      willpower
+    }
+  }
+}
