@@ -1,0 +1,20 @@
+mutation AddGameWithTeamsAndLineups(
+  $date: date,
+  $id: Int!,
+  $teams: game_team_arr_rel_insert_input,
+  $lineups: line_ups_arr_rel_insert_input
+) {
+  insert_games(
+    objects: {
+      date: $date
+      id: $id
+      game_gameTeam: $teams
+      line_ups: $lineups
+    }
+  ) {
+    returning {
+      id
+      date
+    }
+  }
+}

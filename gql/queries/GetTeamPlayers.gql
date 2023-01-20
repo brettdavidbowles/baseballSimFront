@@ -7,7 +7,6 @@ query GetTeamPlayers (
     players {
       id
       name
-      position
       player_attribute {
         composure
         endurance

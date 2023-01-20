@@ -92,7 +92,7 @@ export default function AddPlayers() {
   }
   return (
     <div>
-      {magicButton}
+      {/* {magicButton} */}
     </div>
   )
   // interface team {

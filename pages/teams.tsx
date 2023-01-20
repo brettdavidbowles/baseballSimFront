@@ -17,9 +17,6 @@
 //       name: attribute,
 //       level: Math.random() * 100
 //     })))
-const wtf = () => {
-  console.log('asdfl')
-}
 
 // const testGame = (homeTeam: Batter[], homePitcher: Pitcher, awayTeam: Batter[], awayPitcher: Pitcher) => {
 //   playBall(homeTeam, homePitcher, awayTeam, awayPitcher)

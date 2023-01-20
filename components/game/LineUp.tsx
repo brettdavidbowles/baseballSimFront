@@ -1,9 +1,10 @@
 import * as React from 'react'
 import { createDefaultLineUp } from '../../util/createDefaultLineUp'
+import { POSITIONS } from '../../constants/positions'
+
 interface Player {
   id: number,
-  name: string,
-  position: string
+  name: string
 }
 interface LineUpProps {
   loading: boolean,
@@ -25,9 +26,10 @@ export class LineUp extends React.Component<LineUpProps>{
       return (
         <div>
           {
-            createDefaultLineUp(this.props.players)?.map(player => (
+            createDefaultLineUp(this.props.players)?.map((player, index) => (
               <div key={player.id}>
-                {player.position}: {player.name}
+
+                {POSITIONS[index].name}: {player.name}
               </div>
             ))
           }
