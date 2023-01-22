@@ -1,19 +1,19 @@
 import halfInning from './halfInning'
 import { Batter, Pitcher } from './classes'
-import createRandomLineup from './functions/createRandomLineup'
+// import createRandomLineup from './functions/createRandomLineup'
 import findNextBatterIndex from './functions/findNextBatterIndex'
-import { attributes } from './constants/attributes'
+// import { attributes } from './constants/attributes'
 
-const warlyWarlocks: Batter[] = createRandomLineup('Warly')
-const warlyPitcher = new Pitcher('dan', 34, attributes.map(attribute => ({
-      name: attribute,
-      level: Math.random() * 100
-    })))
-const bzaBallers: Batter[] = createRandomLineup('BZA')
-const bzaPitcher = new Pitcher('brett', 34, attributes.map(attribute => ({
-      name: attribute,
-      level: Math.random() * 100
-    })))
+// const warlyWarlocks: Batter[] = createRandomLineup('Warly')
+// const warlyPitcher = new Pitcher('dan', 34, attributes.map(attribute => ({
+//       name: attribute,
+//       level: Math.random() * 100
+//     })))
+// const bzaBallers: Batter[] = createRandomLineup('BZA')
+// const bzaPitcher = new Pitcher('brett', 34, attributes.map(attribute => ({
+//       name: attribute,
+//       level: Math.random() * 100
+//     })))
 
 export default function playBall(homeLineup: Batter[], homePitcher: Pitcher, awayLineup: Batter[], awayPitcher: Pitcher) {
   let scoreBoard = {
@@ -45,9 +45,10 @@ export default function playBall(homeLineup: Batter[], homePitcher: Pitcher, awa
     scoreBoard.awayTeam.atBats = awayBats.totalAtBats
     scoreBoard.homeTeam.errors += awayBats.errors
     awayLineupPlace = findNextBatterIndex(awayBats.placeInLineup)
+    
     atBatArray.push(...awayBats.atBatArray)
 
-    if(scoreBoard.inning < 9 || scoreBoard.homeTeam.runs === scoreBoard.awayTeam.runs) {
+    if(scoreBoard.inning < 9 || scoreBoard.homeTeam.runs <= scoreBoard.awayTeam.runs) {
       const homeBats = halfInning(homeLineup, homeLineupPlace, awayPitcher, scoreBoard.homeTeam.atBats, scoreBoard.inning)
       scoreBoard.homeTeam.runs += homeBats.runs
       scoreBoard.homeTeam.hits += homeBats.hits
@@ -67,7 +68,7 @@ export default function playBall(homeLineup: Batter[], homePitcher: Pitcher, awa
     } else{
       statsArray.push({
         inning: scoreBoard.inning,
-        // awayStats: awayBats
+        awayRuns: scoreBoard.awayTeam.runs
       })
     }
     scoreBoard.inning++
@@ -77,7 +78,7 @@ export default function playBall(homeLineup: Batter[], homePitcher: Pitcher, awa
   // return (({ homeTeam, awayTeam, inning }) => ( {homeTeam, awayTeam, inning }))(scoreBoard)
   return { atBatArray, statsArray }
 }
-const { atBatArray, statsArray } = playBall(bzaBallers, bzaPitcher, warlyWarlocks, warlyPitcher)
+// const { atBatArray, statsArray } = playBall(bzaBallers, bzaPitcher, warlyWarlocks, warlyPitcher)
 // console.log(atBatArray, statsArray)
-console.log('atBats', atBatArray)
-console.log('stats', statsArray)
+// console.log('atBats', atBatArray)
+// console.log('stats', statsArray)

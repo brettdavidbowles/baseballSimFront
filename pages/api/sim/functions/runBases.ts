@@ -2,7 +2,6 @@ import { atBatOutcome } from '../constants/atBatOutcome'
 import { Batter } from '../classes'
 
 export default function runBases (hit: string, runner: Batter, runnersOn: (false | Batter)[]) {
-  console.log(atBatOutcome)
   const newRunnersOn = [...runnersOn]
   const hitNumber = atBatOutcome.hit.findIndex(x => x === hit)
   let runs = 0

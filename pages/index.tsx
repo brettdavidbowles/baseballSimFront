@@ -5,11 +5,12 @@ import { useState, useEffect } from "react";
 import { Team } from '../classes'
 import * as GetTeamPlayers from 'gql/queries/GetTeamPlayers.gql'
 import { LineUp } from "../components/game/LineUp";
-import * as AddGameWithTeamsAndLineups from 'gql/mutations/AddGameWithTeamsAndLineups.gql'
+import * as AddFullGame from 'gql/mutations/AddFullGame.gql'
+import atBat from "./api/sim/atBat";
 
 export default function RunGame() {
   const { loading, error, data } = useQuery(GetTeams)
-  const [ addGameWithTeamsAndLineups, { data: mutationData }] = useMutation(AddGameWithTeamsAndLineups)
+  const [ addFullGame, { data: mutationData }] = useMutation(AddFullGame)
   const [ homeTeam, setHomeTeam ] = useState<Team>({
     name: ''
   })
@@ -33,9 +34,7 @@ export default function RunGame() {
       variables: { name: awayTeam.name},
       skip: !awayTeam.name
   })
-
-  const makePlayerArray = (playerData: any) => {
-    console.log(playerData)
+  const makeLineUpArray = (playerData: any) => {
     const arr = []
     for(let i=0; i<10; i++) {
       arr.push({
@@ -46,9 +45,23 @@ export default function RunGame() {
     return arr
   }
 
-  const addGame = () => {
-    const randomId = Math.floor(Math.random() * 100000)
-    addGameWithTeamsAndLineups({
+  const makePlayerArray = (playerData: any) => {
+    const arr = []
+    for(let i=0; i<10; i++) {
+      arr.push({
+        number_in_lineup: i,
+        player_id: playerData[i].id,
+        name: playerData[i].name,
+        attributes: playerData[i].player_attribute
+      })
+    }
+    return arr
+  }
+
+  const addGame = (atBatArray: object[]) => {
+    const randomId = Math.floor(Math.random() * 1000)
+    // change this to a higher number for any sort of demo to avoid repeating games... need to make it incremental at some point
+    addFullGame({
       variables: {
         id: randomId,
         date: new Date(),
@@ -70,23 +83,72 @@ export default function RunGame() {
               id: randomId,
               isHomeTeam: false,
               line_up_players: {
-                data: makePlayerArray(awayTeamData?.teams_by_pk?.players)
+                data: makeLineUpArray(awayTeamData?.teams_by_pk?.players)
               }
             },
             {
               id: randomId + 1,
               isHomeTeam: true,
               line_up_players: {
-                data: makePlayerArray(homeTeamData?.teams_by_pk?.players)
+                data: makeLineUpArray(homeTeamData?.teams_by_pk?.players)
               }
             }
           ]
+        },
+        atBats: {
+          data: atBatArray
         }
       }
     })
   }
-  const runSim = async () => {
 
+  const createRunnerArray = (runnersOn: any) => {
+    const arr = []
+    for(let i=0; i<runnersOn.length; i++) {
+      if(runnersOn[i]?.id) {
+        arr.push({
+          base: i + 1,
+          player_id: runnersOn[i].id
+        })
+      }
+    }
+    return arr
+  }
+  
+  const runSim = async () => {
+    const data = {
+      awayTeam: makePlayerArray(awayTeamData?.teams_by_pk?.players),
+      homeTeam: makePlayerArray(homeTeamData?.teams_by_pk?.players)
+    }
+    const postData = async () => {
+      const response = await fetch('/api/runSim', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      })
+      return response.json()
+    }
+    postData().then(data => {
+      const { game } = data
+      const atBatArray = game.atBatArray.map((atBat: any) =>{
+        return {
+          balls: atBat.balls,
+          strikes: atBat.strikes,
+          batterId: atBat.batterId,
+          inning: atBat.inning,
+          outcome: atBat.outcome,
+          pitcherId: atBat.pitcherId,
+          rbis: atBat.rbis,
+          runners_ons: {
+            data: {
+              runnersOn_players: {
+                data: createRunnerArray(atBat.newRunnersOn)
+              }
+            }
+          }
+        }
+      })
+      addGame(atBatArray)
+    })
   }
 
   return (
@@ -124,7 +186,9 @@ export default function RunGame() {
             />
           </div>
         </div>
-        <button onClick={addGame}>Run Game</button>
+
+        {/* <button onClick={addGame}>Run Game</button> */}
+        <button onClick={runSim}>testapi</button>
         {/* for the love of god add some disabled state here */}
       </div>
     </div>

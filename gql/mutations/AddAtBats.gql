@@ -1,0 +1,11 @@
+mutation AddAtBats (
+  $input: [at_bats_insert_input!]!
+) {
+  insert_at_bats(
+    objects: $input
+  ) {
+    returning {
+      id
+    }
+  }
+}

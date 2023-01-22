@@ -2,8 +2,7 @@ import { POSITIONS } from '../constants/positions'
 
 interface Player {
   id: number,
-  name: string,
-  position: string
+  name: string
 }
 // need to put this in a file, i have it in two places
 
